@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Furever Haven — Adopt a Pet</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <style>
+    .adoption-hero {
+      background: linear-gradient(135deg, #fff7ed 0%, #fce7f3 50%, #ede9fe 100%);
+      padding: 80px 64px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .adoption-hero .banner-shapes { position: absolute; inset: 0; pointer-events: none; }
+    .adoption-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--yellow);
+      color: var(--dark);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+    .adoption-hero h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 56px;
+      color: var(--dark);
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+    .adoption-hero h1 span {
+      background: linear-gradient(135deg, var(--orange), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .adoption-hero p {
+      font-size: 17px;
+      color: #6b7280;
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .adoption-container {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    .form-card {
+      background: white;
+      border-radius: 28px;
+      padding: 48px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+    }
+
+    .form-card h2 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 28px;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .form-card .form-subtitle {
+      font-size: 14px;
+      color: #9ca3af;
+      margin-bottom: 36px;
+      font-weight: 400;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group.full { grid-column: 1 / -1; }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--dark);
+      letter-spacing: 0.5px;
+    }
+
+    .form-group label span.required {
+      color: var(--pink);
+      margin-left: 2px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 12px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: #fafafa;
+      width: 100%;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 4px rgba(255,107,53,0.1);
+      background: white;
+    }
+
+    .form-group input.error,
+    .form-group select.error,
+    .form-group textarea.error {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 4px rgba(239,68,68,0.1);
+    }
+
+    .form-group .error-msg {
+      font-size: 12px;
+      color: #ef4444;
+      font-weight: 700;
+      display: none;
+    }
+
+    .form-group .error-msg.visible { display: block; }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .char-count {
+      font-size: 11px;
+      color: #9ca3af;
+      text-align: right;
+      font-weight: 600;
+    }
+
+    .char-count.warn { color: var(--orange); }
+    .char-count.over { color: #ef4444; }
+
+    .pet-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .pet-option {
+      position: relative;
+    }
+
+    .pet-option input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .pet-option label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 16px 12px;
+      border: 2px solid #e5e7eb;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #fafafa;
+      font-size: 12px;
+      font-weight: 800;
+      color: #6b7280;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
+    .pet-option label img {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      object-fit: cover;
+    }
+
+    .pet-option input[type="radio"]:checked + label {
+      border-color: var(--orange);
+      background: #fff7ed;
+      color: var(--dark);
+      box-shadow: 0 0 0 4px rgba(255,107,53,0.1);
+    }
+
+    .pet-option label:hover {
+      border-color: var(--orange);
+      transform: translateY(-2px);
+    }
+
+    .location-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .location-option {
+      position: relative;
+    }
+
+    .location-option input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .location-option label {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 16px 18px;
+      border: 2px solid #e5e7eb;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #fafafa;
+      font-weight: 800;
+      font-size: 13px;
+      color: var(--dark);
+    }
+
+    .location-option label span {
+      font-size: 11px;
+      font-weight: 600;
+      color: #9ca3af;
+    }
+
+    .location-option input[type="radio"]:checked + label {
+      border-color: var(--teal);
+      background: #f0fffe;
+      box-shadow: 0 0 0 4px rgba(78,205,196,0.12);
+    }
+
+    .location-option label:hover {
+      border-color: var(--teal);
+      transform: translateY(-2px);
+    }
+
+    .honeypot { display: none !important; visibility: hidden !important; }
+
+    .form-divider {
+      height: 1px;
+      background: #f3f4f6;
+      margin: 28px 0;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--orange), var(--pink));
+      color: white;
+      border: none;
+      border-radius: 16px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+      box-shadow: 0 6px 20px rgba(255,107,53,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 28px rgba(255,107,53,0.45);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .rate-limit-msg {
+      display: none;
+      background: #fef2f2;
+      border: 1.5px solid #fca5a5;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #dc2626;
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    .rate-limit-msg.visible { display: block; }
+
+    .success-card {
+      display: none;
+      text-align: center;
+      padding: 48px 32px;
+    }
+
+    .success-card.visible { display: block; }
+    .form-fields.hidden { display: none; }
+
+    .success-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+      animation: bounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes bounceIn {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .success-card h3 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 32px;
+      color: var(--dark);
+      margin-bottom: 12px;
+    }
+
+    .success-card p {
+      font-size: 15px;
+      color: #6b7280;
+      line-height: 1.7;
+      max-width: 400px;
+      margin: 0 auto 28px;
+      font-weight: 400;
+    }
+
+    .success-card .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      background: linear-gradient(135deg, var(--orange), var(--pink));
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 800;
+      border-radius: 100px;
+      transition: transform 0.2s;
+    }
+
+    .success-card .back-btn:hover { transform: translateY(-2px); }
+
+    .notice-box {
+      background: #fff7ed;
+      border: 1.5px solid #fed7aa;
+      border-radius: 14px;
+      padding: 14px 18px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      margin-bottom: 28px;
+    }
+
+    .notice-box i {
+      color: var(--orange);
+      font-size: 18px;
+      margin-top: 1px;
+      flex-shrink: 0;
+    }
+
+    .notice-box p {
+      font-size: 13px;
+      color: #92400e;
+      font-weight: 600;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      .adoption-hero { padding: 48px 28px; }
+      .adoption-hero h1 { font-size: 38px; }
+      .adoption-container { padding: 48px 16px; }
+      .form-card { padding: 28px 20px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .pet-options { grid-template-columns: repeat(3, 1fr); }
+      .location-options { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <a href="index.html" class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/1076/1076877.png" alt="Paw Logo">
+        <span class="logo-text">Furever Haven</span>
+      </a>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="adoption.html" class="active">Adoption</a></li>
+          <li><a href="sponsor.html">Sponsor</a></li>
+          <li><a href="lost-found.html">Lost & Found</a></li>
+          <li><a href="services.html">Services</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="header-right">
+      <div class="search-bar">
+        <input type="text" placeholder="Search...">
+        <button class="search-btn"><i class="fas fa-search"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <section class="adoption-hero">
+    <div class="banner-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+    <div class="adoption-hero-badge">🐾 Start Your Adoption Journey</div>
+    <h1>Find Your <span>Furever</span> Friend</h1>
+    <p>Fill out the form below and we'll send you everything you need to know to meet your new best friend.</p>
+  </section>
+
+  <div class="adoption-container">
+    <div class="form-card">
+
+      <div class="form-fields">
+        <h2>Adoption Application 🐾</h2>
+        <p class="form-subtitle">All fields are required. You'll receive a confirmation email with your receipt and next steps.</p>
+
+        <div class="notice-box">
+          <i class="fas fa-info-circle"></i>
+          <p>After submitting, check your email for your adoption receipt. Simply show it to <strong>Morish</strong> at the meetup location to claim your pet.</p>
+        </div>
+
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label>Full Name <span class="required">*</span></label>
+            <input type="text" id="adopter-name" placeholder="e.g. Maria Santos" maxlength="100" autocomplete="name">
+            <span class="error-msg" id="name-error">Please enter your full name.</span>
+          </div>
+
+          <div class="form-group">
+            <label>Email Address <span class="required">*</span></label>
+            <input type="email" id="adopter-email" placeholder="e.g. maria@gmail.com" maxlength="150" autocomplete="email">
+            <span class="error-msg" id="email-error">Please enter a valid email address.</span>
+          </div>
+
+          <div class="form-group full">
+            <label>Home Address <span class="required">*</span></label>
+            <input type="text" id="adopter-address" placeholder="e.g. 123 Malolos St., Bulacan" maxlength="200" autocomplete="street-address">
+            <span class="error-msg" id="address-error">Please enter your address.</span>
+          </div>
+
+          <div class="form-group full">
+            <label>Choose a Pet <span class="required">*</span></label>
+            <div class="pet-options">
+              <div class="pet-option">
+                <input type="radio" name="pet" id="pet-logan" value="Logan 🐾 (4-month-old puppy, Male)">
+                <label for="pet-logan">
+                  <img src="https://images.unsplash.com/photo-1601979031925-424e53b6caaa?w=100&q=80" alt="Logan">
+                  Logan
+                </label>
+              </div>
+              <div class="pet-option">
+                <input type="radio" name="pet" id="pet-dean" value="Dean 🐕 (2-year-old dog, Male)">
+                <label for="pet-dean">
+                  <img src="https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?w=100&q=80" alt="Dean">
+                  Dean
+                </label>
+              </div>
+              <div class="pet-option">
+                <input type="radio" name="pet" id="pet-jess" value="Jess 🐱 (2-year-old cat, Female)">
+                <label for="pet-jess">
+                  <img src="https://images.unsplash.com/photo-1495360010541-f48722b34f7d?w=100&q=80" alt="Jess">
+                  Jess
+                </label>
+              </div>
+              <div class="pet-option">
+                <input type="radio" name="pet" id="pet-mochi" value="Mochi 🐶 (1-year-old mixed breed, Male)">
+                <label for="pet-mochi">
+                  <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=100&q=80" alt="Mochi">
+                  Mochi
+                </label>
+              </div>
+              <div class="pet-option">
+                <input type="radio" name="pet" id="pet-nala" value="Nala 🐱 (3-year-old cat, Female)">
+                <label for="pet-nala">
+                  <img src="https://www.cascadiannomads.com/uploads/1/8/9/3/1893015/3963329_orig.jpg" alt="Nala">
+                  Nala
+                </label>
+              </div>
+              <div class="pet-option">
+                <input type="radio" name="pet" id="pet-coco" value="Coco 🐾 (6-month-old puppy, Female)">
+                <label for="pet-coco">
+                  <img src="https://images.unsplash.com/photo-1561037404-61cd46aa615b?w=100&q=80" alt="Coco">
+                  Coco
+                </label>
+              </div>
+            </div>
+            <span class="error-msg" id="pet-error">Please choose a pet.</span>
+          </div>
+
+          <div class="form-group full">
+            <label>Pickup Location <span class="required">*</span></label>
+            <div class="location-options">
+              <div class="location-option">
+                <input type="radio" name="location" id="loc-malolos" value="Robinsons Malolos (meet at Starbucks Malolos)">
+                <label for="loc-malolos">
+                  <i class="fas fa-map-marker-alt" style="color: var(--orange);"></i>
+                  Robinsons Malolos
+                  <span>Meet at Starbucks Malolos</span>
+                </label>
+              </div>
+              <div class="location-option">
+                <input type="radio" name="location" id="loc-caloocan" value="SM Grand Central Caloocan (meet at Starbucks Grand Central)">
+                <label for="loc-caloocan">
+                  <i class="fas fa-map-marker-alt" style="color: var(--teal);"></i>
+                  SM Grand Central Caloocan
+                  <span>Meet at Starbucks Grand Central</span>
+                </label>
+              </div>
+            </div>
+            <span class="error-msg" id="location-error">Please choose a pickup location.</span>
+          </div>
+
+          <div class="form-group full">
+            <label>Message <span class="required">*</span></label>
+            <textarea id="adopter-message" placeholder="Tell us a bit about yourself and why you'd like to adopt..." maxlength="500"></textarea>
+            <span class="char-count" id="char-count">0 / 500</span>
+            <span class="error-msg" id="message-error">Please write a short message.</span>
+          </div>
+
+        </div>
+
+        <!-- Honeypot anti-bot field -->
+        <input type="text" class="honeypot" id="hp-field" tabindex="-1" autocomplete="off">
+
+        <div class="form-divider"></div>
+
+        <button class="submit-btn" id="submit-btn" onclick="submitAdoption()">
+          <i class="fas fa-paw"></i>
+          <span id="btn-text">Submit Adoption Application</span>
+        </button>
+
+        <div class="rate-limit-msg" id="rate-limit-msg">
+          <i class="fas fa-clock"></i> Too many submissions. Please wait before trying again.
+        </div>
+      </div>
+
+      <div class="success-card" id="success-card">
+        <div class="success-icon">🐾</div>
+        <h3>Application Sent!</h3>
+        <p>Check your inbox — we've sent your adoption receipt with all the details on how to claim your new furry friend.</p>
+        <a href="index.html" class="back-btn"><i class="fas fa-home"></i> Back to Home</a>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-brand">Furever Haven 🐾</div>
+    <div class="footer-copy">© 2025 Furever Haven. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms</a>
+      <a href="adoption.html">Adopt</a>
+    </div>
+  </footer>
+
+  <script>
+    (function() { emailjs.init('tsCajoh5dqxR93vz5'); })();
+
+    const RATE_LIMIT_KEY = 'fh_submission_times';
+    const MAX_SUBMISSIONS = 3;
+    const WINDOW_MS = 60 * 60 * 1000;
+
+    function sanitize(str) {
+      return str.replace(/[<>"'`]/g, '').trim();
+    }
+
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function checkRateLimit() {
+      const now = Date.now();
+      const times = JSON.parse(localStorage.getItem(RATE_LIMIT_KEY) || '[]');
+      const recent = times.filter(t => now - t < WINDOW_MS);
+      if (recent.length >= MAX_SUBMISSIONS) return false;
+      recent.push(now);
+      localStorage.setItem(RATE_LIMIT_KEY, JSON.stringify(recent));
+      return true;
+    }
+
+    function setError(inputId, errorId, show) {
+      const input = document.getElementById(inputId);
+      const error = document.getElementById(errorId);
+      if (show) {
+        input && input.classList.add('error');
+        error && error.classList.add('visible');
+      } else {
+        input && input.classList.remove('error');
+        error && error.classList.remove('visible');
+      }
+    }
+
+    function validateForm() {
+      let valid = true;
+
+      const name = document.getElementById('adopter-name').value.trim();
+      const email = document.getElementById('adopter-email').value.trim();
+      const address = document.getElementById('adopter-address').value.trim();
+      const pet = document.querySelector('input[name="pet"]:checked');
+      const location = document.querySelector('input[name="location"]:checked');
+      const message = document.getElementById('adopter-message').value.trim();
+      const honeypot = document.getElementById('hp-field').value;
+
+      if (honeypot) return false;
+
+      if (!name || name.length < 2) { setError('adopter-name', 'name-error', true); valid = false; }
+      else setError('adopter-name', 'name-error', false);
+
+      if (!email || !isValidEmail(email)) { setError('adopter-email', 'email-error', true); valid = false; }
+      else setError('adopter-email', 'email-error', false);
+
+      if (!address || address.length < 5) { setError('adopter-address', 'address-error', true); valid = false; }
+      else setError('adopter-address', 'address-error', false);
+
+      if (!pet) { document.getElementById('pet-error').classList.add('visible'); valid = false; }
+      else document.getElementById('pet-error').classList.remove('visible');
+
+      if (!location) { document.getElementById('location-error').classList.add('visible'); valid = false; }
+      else document.getElementById('location-error').classList.remove('visible');
+
+      if (!message || message.length < 10) { setError('adopter-message', 'message-error', true); valid = false; }
+      else setError('adopter-message', 'message-error', false);
+
+      return valid;
+    }
+
+    function submitAdoption() {
+      if (!validateForm()) return;
+
+      if (!checkRateLimit()) {
+        document.getElementById('rate-limit-msg').classList.add('visible');
+        return;
+      }
+
+      const btn = document.getElementById('submit-btn');
+      const btnText = document.getElementById('btn-text');
+      btn.disabled = true;
+      btnText.textContent = 'Sending...';
+
+      const name = sanitize(document.getElementById('adopter-name').value);
+      const email = sanitize(document.getElementById('adopter-email').value);
+      const address = sanitize(document.getElementById('adopter-address').value);
+      const pet = document.querySelector('input[name="pet"]:checked').value;
+      const location = document.querySelector('input[name="location"]:checked').value;
+      const message = sanitize(document.getElementById('adopter-message').value);
+
+      const params = {
+        from_name: name,
+        from_email: email,
+        address: address,
+        pet_name: pet,
+        pickup_location: location,
+        message: message
+      };
+
+      emailjs.send('service_ypykiit', 'template_sf6covc', params)
+        .then(function() {
+          document.querySelector('.form-fields').classList.add('hidden');
+          document.getElementById('success-card').classList.add('visible');
+        })
+        .catch(function(error) {
+          console.error('EmailJS error:', error);
+          btn.disabled = false;
+          btnText.textContent = 'Submit Adoption Application';
+          alert('Something went wrong. Please try again or contact us directly at morishalfonsomacayan@gmail.com');
+        });
+    }
+
+    document.getElementById('adopter-message').addEventListener('input', function() {
+      const len = this.value.length;
+      const counter = document.getElementById('char-count');
+      counter.textContent = len + ' / 500';
+      counter.className = 'char-count';
+      if (len > 450) counter.classList.add('warn');
+      if (len >= 500) counter.classList.add('over');
+    });
+  </script>
+
+</body>
+</html>

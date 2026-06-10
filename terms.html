@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Furever Haven — Terms & Conditions</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .page-hero {
+      background: linear-gradient(135deg, #fff7ed 0%, #fce7f3 50%, #ede9fe 100%);
+      padding: 80px 64px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero .banner-shapes { position: absolute; inset: 0; pointer-events: none; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--orange);
+      color: white;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+    .page-hero h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 52px;
+      color: var(--dark);
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+    .page-hero h1 span {
+      background: linear-gradient(135deg, var(--orange), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .page-hero p {
+      font-size: 15px;
+      color: #6b7280;
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.7;
+      font-weight: 400;
+    }
+
+    .policy-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 0;
+      max-width: 1100px;
+      margin: 60px auto;
+      padding: 0 40px;
+      align-items: start;
+    }
+
+    .policy-toc {
+      position: sticky;
+      top: 92px;
+      background: white;
+      border-radius: 20px;
+      padding: 28px 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+      margin-right: 40px;
+    }
+
+    .policy-toc h4 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 15px;
+      color: var(--dark);
+      margin-bottom: 16px;
+    }
+
+    .toc-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .toc-list a {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #6b7280;
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 8px;
+      transition: all 0.2s;
+      line-height: 1.4;
+    }
+
+    .toc-list a:hover { background: #fff7ed; color: var(--orange); }
+    .toc-list a.active { background: #fff7ed; color: var(--orange); }
+
+    .policy-content {
+      background: white;
+      border-radius: 24px;
+      padding: 48px 52px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    }
+
+    .policy-meta {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .policy-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #9ca3af;
+    }
+
+    .policy-meta-item i { color: var(--orange); }
+
+    .policy-section {
+      margin-bottom: 44px;
+      scroll-margin-top: 100px;
+    }
+
+    .policy-section h2 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 22px;
+      color: var(--dark);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .policy-section h2 .section-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(135deg, var(--orange), var(--pink));
+      color: white;
+      border-radius: 8px;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .policy-section p {
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.85;
+      font-weight: 400;
+      margin-bottom: 12px;
+    }
+
+    .policy-section ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 12px 0 16px 0;
+    }
+
+    .policy-section ul li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: #4b5563;
+      line-height: 1.7;
+      font-weight: 400;
+    }
+
+    .policy-section ul li i {
+      color: var(--orange);
+      font-size: 12px;
+      margin-top: 4px;
+      flex-shrink: 0;
+    }
+
+    .policy-divider {
+      height: 1.5px;
+      background: #f3f4f6;
+      margin: 40px 0;
+    }
+
+    .highlight-box {
+      background: #fff7ed;
+      border-left: 4px solid var(--orange);
+      border-radius: 0 12px 12px 0;
+      padding: 16px 20px;
+      margin: 16px 0;
+    }
+
+    .highlight-box p {
+      color: #92400e;
+      font-size: 13px;
+      font-weight: 700;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .warning-box {
+      background: #fef2f2;
+      border-left: 4px solid #ef4444;
+      border-radius: 0 12px 12px 0;
+      padding: 16px 20px;
+      margin: 16px 0;
+    }
+
+    .warning-box p {
+      color: #dc2626;
+      font-size: 13px;
+      font-weight: 700;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    .contact-box {
+      background: linear-gradient(135deg, #fff7ed, #fce7f3);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-top: 16px;
+    }
+
+    .contact-box p {
+      font-size: 14px;
+      color: var(--dark);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .contact-box a {
+      color: var(--orange);
+      text-decoration: none;
+      font-weight: 800;
+    }
+
+    .contact-box a:hover { text-decoration: underline; }
+
+    @media (max-width: 1024px) {
+      .policy-layout { grid-template-columns: 1fr; padding: 0 28px; margin: 40px auto; }
+      .policy-toc { position: static; margin-right: 0; margin-bottom: 24px; }
+      .toc-list { flex-direction: row; flex-wrap: wrap; }
+      .toc-list a { padding: 5px 10px; }
+    }
+
+    @media (max-width: 768px) {
+      .page-hero { padding: 48px 28px; }
+      .page-hero h1 { font-size: 36px; }
+      .policy-layout { padding: 0 16px; }
+      .policy-content { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <a href="index.html" class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/1076/1076877.png" alt="Paw Logo">
+        <span class="logo-text">Furever Haven</span>
+      </a>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="adoption.html">Adoption</a></li>
+          <li><a href="sponsor.html">Sponsor</a></li>
+          <li><a href="lost-found.html">Lost & Found</a></li>
+          <li><a href="services.html">Services</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="header-right">
+      <div class="search-bar">
+        <input type="text" placeholder="Search...">
+        <button class="search-btn"><i class="fas fa-search"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <section class="page-hero">
+    <div class="banner-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+    <div class="hero-badge">📄 Legal</div>
+    <h1>Terms & <span>Conditions</span></h1>
+    <p>Please read these terms carefully before using our website or submitting any application or inquiry.</p>
+  </section>
+
+  <div class="policy-layout">
+
+    <aside class="policy-toc">
+      <h4>📋 Contents</h4>
+      <ul class="toc-list">
+        <li><a href="#t1">1. Acceptance</a></li>
+        <li><a href="#t2">2. Our Services</a></li>
+        <li><a href="#t3">3. Adoption Terms</a></li>
+        <li><a href="#t4">4. Sponsorship Terms</a></li>
+        <li><a href="#t5">5. Services & Booking</a></li>
+        <li><a href="#t6">6. Lost & Found Board</a></li>
+        <li><a href="#t7">7. User Conduct</a></li>
+        <li><a href="#t8">8. Intellectual Property</a></li>
+        <li><a href="#t9">9. Disclaimers</a></li>
+        <li><a href="#t10">10. Limitation of Liability</a></li>
+        <li><a href="#t11">11. Governing Law</a></li>
+        <li><a href="#t12">12. Contact Us</a></li>
+      </ul>
+    </aside>
+
+    <article class="policy-content">
+
+      <div class="policy-meta">
+        <div class="policy-meta-item"><i class="fas fa-calendar-alt"></i> Effective: January 1, 2025</div>
+        <div class="policy-meta-item"><i class="fas fa-sync-alt"></i> Last Updated: January 1, 2025</div>
+        <div class="policy-meta-item"><i class="fas fa-map-marker-alt"></i> Malolos, Bulacan, Philippines</div>
+      </div>
+
+      <div class="policy-section" id="t1">
+        <h2><span class="section-num">1</span> Acceptance of Terms</h2>
+        <p>By accessing and using the Furever Haven website ("Site") or submitting any form, application, or inquiry, you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, please do not use our website or services.</p>
+        <p>These Terms are governed by the laws of the Republic of the Philippines, including but not limited to the <strong>Civil Code of the Philippines</strong>, the <strong>Consumer Act (RA 7394)</strong>, and the <strong>Data Privacy Act of 2012 (RA 10173)</strong>.</p>
+      </div>
+
+      <div class="policy-divider"></div>
+
+      <div class="policy-section" id="t2">
+        <h2><span class="section-num">2</span> Our Services</h2>
+        <p>Furever Haven is a pet rescue, rehabilitation, and adoption organization based in Malolos, Bulacan. We offer the following through this website:</p>
+        <ul>
+          <li><i class="fas fa-circle"></i> Pet adoption applications and processing</li>
+          <li><i class="fas fa-circle"></i> Animal sponsorship programs</li>
+          <li><i class="fas fa-circle"></i> Pet care services including veterinary, grooming, boarding, and training</li>
+          <li><i class="fas fa-circle"></i> A community Lost & Found pet board</li>
+        </ul>
+        <p>We reserve the right to modify, suspend, or discontinue any part of our services at any time without prior notice.</p>
+      </div>
+
+      <div class="policy-divider"></div>
+
+      <div class="policy-section" id="t3">
+        <h2><span class="section-num">3</span> Adoption Terms</h2>
+        <p>Submitting an adoption application does not guarantee adoption. All applications are subject to review and approval at our sole discretion. By submitting an adoption application, you agree to the following:</p>
+        <ul>
+          <li><i class="fas fa-circle"></i> All information provided in your application is accurate and truthful</li>
+          <li><i class="fas fa-circle"></i> You are at least 18 years of age and legally capable of entering into an agreement</li>
+          <li><i class="fas fa-circle"></i> You consent to a home visit or interview as part of the adoption process</li>
+          <li><i class="fas fa-circle"></i> You agree to provide a safe, loving, and permanent home for the adopted animal</li>
+          <li><i class="fas fa-circle"></i> You will not re-home, sell, or transfer the adopted animal without notifying us first</li>
+          <li><i class="fas fa-circle"></i> You understand that adoption fees, if any, are non-refundable once the animal is in your care</li>
+        </ul>
+        <div class="highlight-box">
+          <p>Furever Haven reserves the right to reclaim an adopted animal if there is evidence of neglect, abuse, or violation of these adoption terms — without any refund obligation.</p>
+        </div>
+      </div>
+
+      <div class="policy-divider"></div>
+
+      <div class="policy-section" id="t4">
+        <h2><span class="section-num">4</span> Sponsorship Terms</h2>
+        <p>Sponsorship contributions go directly toward the care and welfare of animals in our shelter. By sponsoring, you agree to the following:</p>
+        <ul>
+          <li><i class="fas fa-circle"></i> All sponsorship payments are voluntary donations and are non-refundable</li>
+          <li><i class="fas fa-circle"></i> Sponsorship does not constitute ownership of or legal claim over any animal</li>
+          <li><i class="fas fa-circle"></i> We will make reasonable efforts to provide updates on sponsored animals as described in each sponsorship tier</li>
+          <li><i class="fas fa-circle"></i> If a sponsored animal is adopted or passes away, we will notify you and may offer the option to redirect your sponsorship to another animal</li>
+          <li><i class="fas fa-circle"></i> Sponsorship payments are processed via GCash or cash; we do not collect credit card information</li>
+        </ul>
+      </div>
+
+      <div class="policy-divider"></div>
+
+      <div class="policy-section" id="t5">
+        <h2><span class="section-num">5</span> Services & Booking</h2>
+        <p>All service bookings (veterinary, grooming, boarding, training) are subject to availability and confirmation. By inquiring or booking a service, you agree to:</p>
+        <ul>
+          <li><i class="fas fa-circle"></i> Provide accurate information about your pet's health, temperament, and any known medical conditions</li>
+          <li><i class="fas fa-circle"></i> Notify us of any aggressive behavior, allergies, or special needs your pet has</li>
+          <li><i class="fas fa-circle"></i> Pay the agreed service fee on the day of service, or a 50% deposit for boarding bookings</li>
+          <li><i class="fas fa-circle"></i> Give at least 24 hours notice for cancellations; boarding cancellations within 24 hours may forfeit the deposit</li>
+        </ul>
+        <p>We reserve the right to decline service if we determine that proceeding would be unsafe for the animal, our staff, or other animals in our care.</p>
+      </div>
+
+      <div class="policy-divider"></div>
+
+      <div class="policy-section" id="t6">
+        <h2><span class="section-num">6</span> Lost & Found Community Board</h2>
+        <p>The Lost & Found board is a community feature that allows users to post reports about lost or found pets. By posting a report, you agree to the following:</p>
+        <ul>
+          <li><i class="fas fa-circle"></i> All information you post is accurate and truthful to the best of your knowledge</li>
+          <li><i class="fas fa-circle"></i> You are responsible for any contact information you choose to make publicly visible</li>
+          <li><i class="fas fa-circle"></i> You will not post false, misleading, or fraudulent reports</li>
+          <li><i class="fas fa-circle"></i> You will not use the board to scam, harass, or defraud other users</li>
+        </ul>
+        <div class="warning-box">
+          <p>Furever Haven does not verify the accuracy of Lost & Found posts and is not responsible for any outcomes resulting from user interactions facilitated through the board. Use your judgment when meeting strangers to claim or return animals.</p>
+        </div>
+        <p>Reports are stored locally in your browser. We do not have access to or control over this data.</p>
+      </div>
+
+      <div class="policy-divider"></div>
+
+      <div class="policy-section" id="t7">
+        <h2><span class="section-num">7</span> User Conduct</h2>
+        <p>You agree not to use this website for any unlawful or prohibited purpose, including but not limited to:</p>
+        <ul>
+          <li><i class="fas fa-circle"></i> Submitting false or fraudulent information in any form</li>
+          <li><i class="fas fa-circle"></i> Attempting to gain unauthorized access to any part of our systems</li>
+          <li><i class="fas fa-circle"></i> Using the site to harass, threaten, or harm any person or animal</li>
+          <li><i class="fas fa-circle"></i> Scraping, crawling, or automating requests to our website</li>
+          <li><i class="fas fa-circle"></i> Attempting to inject malicious code or exploit any vulnerability</li>
+        </ul>
+        <p>We reserve the right to block access to users who violate these terms.</p>
+      </div>
+
+      <div class="policy-divider"></div>
+
+      <div class="policy-section" id="t8">
+        <h2><span class="section-num">8</span> Intellectual Property</h2>
+        <p>All content on this website — including but not limited to text, design, layout, graphics, and code — is the property of Furever Haven unless otherwise stated. You may not copy, reproduce, distribute, or create derivative works from any content on this site without our explicit written permission.</p>
+        <p>Third-party images used on this site (e.g., from Unsplash) are used under their respective licenses.</p>
+      </div>
+
+      <div class="policy-divider"></div>
+
+      <div class="policy-section" id="t9">
+        <h2><span class="section-num">9</span> Disclaimers</h2>
+        <p>This website and its content are provided on an "as is" basis. We make no warranties, express or implied, regarding:</p>
+        <ul>
+          <li><i class="fas fa-circle"></i> The accuracy or completeness of information on this site</li>
+          <li><i class="fas fa-circle"></i> The uninterrupted availability of the website</li>
+          <li><i class="fas fa-circle"></i> The outcome of any adoption application or service booking</li>
+          <li><i class="fas fa-circle"></i> The behavior, health, or compatibility of any animal available for adoption</li>
+        </ul>
+        <p>We strongly encourage all adopters to have newly adopted animals examined by a licensed veterinarian within the first week of adoption.</p>
+      </div>
+
+      <div class="policy-divider"></div>
+
+      <div class="policy-section" id="t10">
+        <h2><span class="section-num">10</span> Limitation of Liability</h2>
+        <p>To the fullest extent permitted by Philippine law, Furever Haven shall not be liable for any indirect, incidental, or consequential damages arising from:</p>
+        <ul>
+          <li><i class="fas fa-circle"></i> Your use of or inability to use this website</li>
+          <li><i class="fas fa-circle"></i> Any animal behavior, injury, or damage after adoption</li>
+          <li><i class="fas fa-circle"></i> Loss of data stored in your browser's localStorage</li>
+          <li><i class="fas fa-circle"></i> Interactions with other users facilitated through our Lost & Found board</li>
+        </ul>
+        <p>Our total liability, if any, shall not exceed the amount paid for the specific service that gave rise to the claim.</p>
+      </div>
+
+      <div class="policy-divider"></div>
+
+      <div class="policy-section" id="t11">
+        <h2><span class="section-num">11</span> Governing Law & Dispute Resolution</h2>
+        <p>These Terms and Conditions are governed by and construed in accordance with the laws of the Republic of the Philippines. Any disputes arising from the use of this website or our services shall be subject to the exclusive jurisdiction of the courts of Malolos, Bulacan, Philippines.</p>
+        <p>We encourage you to contact us first to resolve any concerns before pursuing formal legal action.</p>
+      </div>
+
+      <div class="policy-divider"></div>
+
+      <div class="policy-section" id="t12">
+        <h2><span class="section-num">12</span> Contact Us</h2>
+        <p>For any questions or concerns regarding these Terms and Conditions, please contact us:</p>
+        <div class="contact-box">
+          <p>🐾 Furever Haven</p>
+          <p style="font-weight:400;font-size:13px;color:#6b7280;margin-bottom:4px;">Email: <a href="mailto:morishalfonsomacayan@gmail.com">morishalfonsomacayan@gmail.com</a></p>
+          <p style="font-weight:400;font-size:13px;color:#6b7280;margin-bottom:4px;">Phone: <a href="tel:09684589839">09684589839</a></p>
+          <p style="font-weight:400;font-size:13px;color:#6b7280;margin:0;">Location: Malolos, Bulacan, Philippines</p>
+        </div>
+      </div>
+
+    </article>
+  </div>
+
+  <footer>
+    <div class="footer-brand">Furever Haven 🐾</div>
+    <div class="footer-copy">© 2025 Furever Haven. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+      <a href="adoption.html">Adopt</a>
+    </div>
+  </footer>
+
+  <script>
+    const sections = document.querySelectorAll('.policy-section');
+    const tocLinks = document.querySelectorAll('.toc-list a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 120) current = s.id;
+      });
+      tocLinks.forEach(a => {
+        a.classList.remove('active');
+        if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+      });
+    });
+  </script>
+
+</body>
+</html>

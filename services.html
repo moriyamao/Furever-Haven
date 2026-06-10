@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Furever Haven — Services</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .page-hero {
+      background: linear-gradient(135deg, #ede9fe 0%, #fce7f3 50%, #fff7ed 100%);
+      padding: 80px 64px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero .banner-shapes { position: absolute; inset: 0; pointer-events: none; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--purple);
+      color: white;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+    .page-hero h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 56px;
+      color: var(--dark);
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+    .page-hero h1 span {
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .page-hero p {
+      font-size: 17px;
+      color: #6b7280;
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.7;
+      font-weight: 400;
+    }
+
+    .services-section {
+      padding: 80px 64px;
+      background: var(--white);
+    }
+
+    .section-label {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .section-label h2 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 38px;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .section-label p {
+      font-size: 15px;
+      color: #9ca3af;
+      font-weight: 400;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .service-card {
+      border-radius: 28px;
+      padding: 40px 36px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 24px 48px rgba(0,0,0,0.1);
+    }
+
+    .service-card.vet { background: linear-gradient(135deg, #ede9fe, #fce7f3); }
+    .service-card.grooming { background: linear-gradient(135deg, #fce7f3, #fff7ed); }
+    .service-card.boarding { background: linear-gradient(135deg, #f0fdf4, #e0f2fe); }
+    .service-card.training { background: linear-gradient(135deg, #fff7ed, #fffbeb); }
+
+    .service-card-bg {
+      position: absolute;
+      font-size: 140px;
+      right: -20px;
+      bottom: -20px;
+      opacity: 0.08;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .service-icon {
+      font-size: 48px;
+      margin-bottom: 18px;
+      display: block;
+    }
+
+    .service-card h3 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 26px;
+      color: var(--dark);
+      margin-bottom: 10px;
+    }
+
+    .service-card p {
+      font-size: 14px;
+      color: #6b7280;
+      line-height: 1.7;
+      margin-bottom: 24px;
+      font-weight: 400;
+    }
+
+    .service-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .service-features li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .service-features li i { font-size: 13px; flex-shrink: 0; }
+    .service-card.vet .service-features li i { color: var(--purple); }
+    .service-card.grooming .service-features li i { color: var(--pink); }
+    .service-card.boarding .service-features li i { color: var(--green); }
+    .service-card.training .service-features li i { color: var(--orange); }
+
+    .service-price {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      margin-bottom: 20px;
+    }
+
+    .service-price .from {
+      font-size: 12px;
+      color: #9ca3af;
+      font-weight: 600;
+    }
+
+    .service-price .amount {
+      font-family: 'Fredoka One', cursive;
+      font-size: 32px;
+      color: var(--dark);
+    }
+
+    .service-price .per {
+      font-size: 13px;
+      color: #9ca3af;
+      font-weight: 600;
+    }
+
+    .service-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      color: white;
+    }
+
+    .service-card.vet .service-btn { background: linear-gradient(135deg, var(--purple), var(--pink)); box-shadow: 0 6px 20px rgba(168,85,247,0.3); }
+    .service-card.grooming .service-btn { background: linear-gradient(135deg, var(--pink), var(--orange)); box-shadow: 0 6px 20px rgba(255,107,157,0.3); }
+    .service-card.boarding .service-btn { background: linear-gradient(135deg, var(--green), var(--teal)); box-shadow: 0 6px 20px rgba(52,211,153,0.3); }
+    .service-card.training .service-btn { background: linear-gradient(135deg, var(--orange), var(--yellow)); box-shadow: 0 6px 20px rgba(255,107,53,0.3); color: var(--dark); }
+
+    .service-btn:hover { transform: translateY(-2px); }
+
+    .how-section {
+      padding: 80px 64px;
+      background: var(--cream);
+    }
+
+    .how-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      max-width: 1000px;
+      margin: 48px auto 0;
+      position: relative;
+    }
+
+    .how-steps::before {
+      content: '';
+      position: absolute;
+      top: 32px;
+      left: 10%;
+      right: 10%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--purple), var(--pink), var(--teal), var(--green));
+      z-index: 0;
+    }
+
+    .how-step {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .how-step-circle {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Fredoka One', cursive;
+      font-size: 24px;
+      color: white;
+      margin: 0 auto 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+
+    .how-step:nth-child(1) .how-step-circle { background: linear-gradient(135deg, var(--purple), var(--pink)); }
+    .how-step:nth-child(2) .how-step-circle { background: linear-gradient(135deg, var(--pink), var(--orange)); }
+    .how-step:nth-child(3) .how-step-circle { background: linear-gradient(135deg, var(--teal), var(--blue)); }
+    .how-step:nth-child(4) .how-step-circle { background: linear-gradient(135deg, var(--green), var(--teal)); }
+
+    .how-step h4 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 16px;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+
+    .how-step p {
+      font-size: 12px;
+      color: #9ca3af;
+      line-height: 1.5;
+      font-weight: 400;
+    }
+
+    .faq-section {
+      padding: 80px 64px;
+      background: var(--dark);
+    }
+
+    .faq-section .section-label h2 { color: white; }
+    .faq-section .section-label p { color: rgba(255,255,255,0.5); }
+
+    .faq-list {
+      max-width: 700px;
+      margin: 48px auto 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: rgba(255,255,255,0.06);
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1.5px solid rgba(255,255,255,0.08);
+      transition: border-color 0.2s;
+    }
+
+    .faq-item.open { border-color: rgba(255,107,53,0.4); }
+
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 18px 24px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 800;
+      color: white;
+      gap: 12px;
+    }
+
+    .faq-question i {
+      color: var(--orange);
+      transition: transform 0.3s;
+      flex-shrink: 0;
+    }
+
+    .faq-item.open .faq-question i { transform: rotate(45deg); }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s;
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.7;
+      font-weight: 400;
+      padding: 0 24px;
+    }
+
+    .faq-item.open .faq-answer {
+      max-height: 200px;
+      padding: 0 24px 18px;
+    }
+
+    .cta-section {
+      padding: 80px 64px;
+      background: linear-gradient(135deg, var(--orange), var(--pink));
+      text-align: center;
+    }
+
+    .cta-section h2 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 42px;
+      color: white;
+      margin-bottom: 14px;
+    }
+
+    .cta-section p {
+      font-size: 16px;
+      color: rgba(255,255,255,0.85);
+      margin-bottom: 36px;
+      font-weight: 400;
+    }
+
+    .cta-section a {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 36px;
+      background: white;
+      color: var(--orange);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 800;
+      border-radius: 100px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    .cta-section a:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.2); }
+
+    @media (max-width: 1024px) {
+      .services-grid { grid-template-columns: 1fr; max-width: 520px; }
+      .how-steps { grid-template-columns: repeat(2, 1fr); }
+      .how-steps::before { display: none; }
+    }
+
+    @media (max-width: 768px) {
+      .page-hero { padding: 48px 28px; }
+      .page-hero h1 { font-size: 38px; }
+      .services-section, .how-section, .faq-section, .cta-section { padding: 48px 28px; }
+      .how-steps { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <a href="index.html" class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/1076/1076877.png" alt="Paw Logo">
+        <span class="logo-text">Furever Haven</span>
+      </a>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="adoption.html">Adoption</a></li>
+          <li><a href="sponsor.html">Sponsor</a></li>
+          <li><a href="lost-found.html">Lost & Found</a></li>
+          <li><a href="services.html" class="active">Services</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="header-right">
+      <div class="search-bar">
+        <input type="text" placeholder="Search...">
+        <button class="search-btn"><i class="fas fa-search"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <section class="page-hero">
+    <div class="banner-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+    <div class="hero-badge">🏥 Professional Care</div>
+    <h1>Services for Your <span>Beloved Pets</span></h1>
+    <p>From vet consultations to grooming and boarding — we've got everything your pet needs to thrive.</p>
+  </section>
+
+  <section class="services-section">
+    <div class="section-label">
+      <span class="section-tag" style="background:#f5f3ff;color:var(--purple);">🐾 What We Offer</span>
+      <h2>Our Services</h2>
+      <p>Professional, affordable care by people who genuinely love animals.</p>
+    </div>
+
+    <div class="services-grid">
+
+      <div class="service-card vet">
+        <span class="service-card-bg">💉</span>
+        <span class="service-icon">💉</span>
+        <h3>Veterinary Care</h3>
+        <p>Licensed vet consultations for check-ups, vaccinations, deworming, and general health monitoring. We partner with trusted local vets.</p>
+        <ul class="service-features">
+          <li><i class="fas fa-check-circle"></i> General health check-up</li>
+          <li><i class="fas fa-check-circle"></i> Vaccines & deworming</li>
+          <li><i class="fas fa-check-circle"></i> Nutritional assessment</li>
+          <li><i class="fas fa-check-circle"></i> Parasite treatment</li>
+          <li><i class="fas fa-check-circle"></i> Post-adoption follow-up</li>
+        </ul>
+        <div class="service-price">
+          <span class="from">Starts at</span>
+          <span class="amount">₱300</span>
+          <span class="per">/ session</span>
+        </div>
+        <a href="mailto:morishalfonsomacayan@gmail.com?subject=Vet Service Inquiry" class="service-btn"><i class="fas fa-calendar-alt"></i> Book Now</a>
+      </div>
+
+      <div class="service-card grooming">
+        <span class="service-card-bg">✂️</span>
+        <span class="service-icon">✂️</span>
+        <h3>Grooming</h3>
+        <p>Full grooming sessions to keep your pet clean, comfortable, and looking their best. Gentle handling for shy or anxious pets.</p>
+        <ul class="service-features">
+          <li><i class="fas fa-check-circle"></i> Bath & blow dry</li>
+          <li><i class="fas fa-check-circle"></i> Haircut & trim</li>
+          <li><i class="fas fa-check-circle"></i> Nail clipping</li>
+          <li><i class="fas fa-check-circle"></i> Ear cleaning</li>
+          <li><i class="fas fa-check-circle"></i> Teeth brushing</li>
+        </ul>
+        <div class="service-price">
+          <span class="from">Starts at</span>
+          <span class="amount">₱250</span>
+          <span class="per">/ session</span>
+        </div>
+        <a href="mailto:morishalfonsomacayan@gmail.com?subject=Grooming Service Inquiry" class="service-btn"><i class="fas fa-calendar-alt"></i> Book Now</a>
+      </div>
+
+      <div class="service-card boarding">
+        <span class="service-card-bg">🏠</span>
+        <span class="service-icon">🏠</span>
+        <h3>Pet Boarding</h3>
+        <p>Safe, supervised overnight stays for your pet when you're away. We treat every guest like family with daily updates and playtime.</p>
+        <ul class="service-features">
+          <li><i class="fas fa-check-circle"></i> 24/7 supervision</li>
+          <li><i class="fas fa-check-circle"></i> Daily meals included</li>
+          <li><i class="fas fa-check-circle"></i> Playtime & socialization</li>
+          <li><i class="fas fa-check-circle"></i> Daily photo updates</li>
+          <li><i class="fas fa-check-circle"></i> Emergency vet access</li>
+        </ul>
+        <div class="service-price">
+          <span class="from">Starts at</span>
+          <span class="amount">₱400</span>
+          <span class="per">/ night</span>
+        </div>
+        <a href="mailto:morishalfonsomacayan@gmail.com?subject=Boarding Service Inquiry" class="service-btn"><i class="fas fa-calendar-alt"></i> Book Now</a>
+      </div>
+
+      <div class="service-card training">
+        <span class="service-card-bg">🎓</span>
+        <span class="service-icon">🎓</span>
+        <h3>Pet Training</h3>
+        <p>Basic obedience training using positive reinforcement. Great for newly adopted pets adjusting to their new home environment.</p>
+        <ul class="service-features">
+          <li><i class="fas fa-check-circle"></i> Basic commands (sit, stay, come)</li>
+          <li><i class="fas fa-check-circle"></i> Leash training</li>
+          <li><i class="fas fa-check-circle"></i> Socialization skills</li>
+          <li><i class="fas fa-check-circle"></i> Behavior correction</li>
+          <li><i class="fas fa-check-circle"></i> Owner guidance included</li>
+        </ul>
+        <div class="service-price">
+          <span class="from">Starts at</span>
+          <span class="amount">₱500</span>
+          <span class="per">/ session</span>
+        </div>
+        <a href="mailto:morishalfonsomacayan@gmail.com?subject=Training Service Inquiry" class="service-btn"><i class="fas fa-calendar-alt"></i> Book Now</a>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="how-section">
+    <div class="section-label">
+      <span class="section-tag" style="background:#f5f3ff;color:var(--purple);">📋 How It Works</span>
+      <h2>Booking a Service</h2>
+      <p>Simple, fast, and stress-free for you and your pet.</p>
+    </div>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="how-step-circle">1</div>
+        <h4>Choose a Service</h4>
+        <p>Pick from vet, grooming, boarding, or training based on your pet's needs.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-step-circle">2</div>
+        <h4>Contact Us</h4>
+        <p>Send us an email or message and we'll confirm your preferred schedule.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-step-circle">3</div>
+        <h4>Bring Your Pet</h4>
+        <p>Come to the agreed location with your furry friend. No need for extra documents.</p>
+      </div>
+      <div class="how-step">
+        <div class="how-step-circle">4</div>
+        <h4>We Handle the Rest</h4>
+        <p>Sit back and relax while we take care of your beloved pet with love.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq-section">
+    <div class="section-label">
+      <span class="section-tag" style="background:rgba(255,217,61,0.15);color:var(--yellow);">❓ FAQs</span>
+      <h2>Common Questions</h2>
+      <p>Everything you need to know about our services.</p>
+    </div>
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          Do I need to book in advance?
+          <i class="fas fa-plus"></i>
+        </div>
+        <div class="faq-answer">Yes, we recommend booking at least 2–3 days in advance to secure your preferred schedule. For boarding, 1 week advance notice is ideal especially during holidays.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          Are your groomers and trainers certified?
+          <i class="fas fa-plus"></i>
+        </div>
+        <div class="faq-answer">Our groomers and trainers have hands-on experience with various breeds and temperaments. We use only positive, humane techniques — no punishment-based methods ever.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          What areas do you serve?
+          <i class="fas fa-plus"></i>
+        </div>
+        <div class="faq-answer">We currently serve Malolos, Bulacan and Caloocan areas. Contact us to check if your location is covered for home visits or pickup arrangements.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          How do I pay for services?
+          <i class="fas fa-plus"></i>
+        </div>
+        <div class="faq-answer">We accept cash and GCash. Payment is made on the day of service. For boarding, a 50% deposit is required upon booking to hold your slot.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-question" onclick="toggleFaq(this)">
+          What if my pet has a medical condition?
+          <i class="fas fa-plus"></i>
+        </div>
+        <div class="faq-answer">Please let us know about any existing conditions when booking. Our vet partner can assess if it's safe to proceed, and we'll adjust the service plan accordingly.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <h2>Ready to Book? 🐾</h2>
+    <p>Send us a message and we'll get back to you within 24 hours.</p>
+    <a href="mailto:morishalfonsomacayan@gmail.com?subject=Service Booking">
+      <i class="fas fa-envelope"></i> Get in Touch
+    </a>
+  </section>
+
+  <footer>
+    <div class="footer-brand">Furever Haven 🐾</div>
+    <div class="footer-copy">© 2025 Furever Haven. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+      <a href="adoption.html">Adopt</a>
+    </div>
+  </footer>
+
+  <script>
+    function toggleFaq(el) {
+      const item = el.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    }
+  </script>
+
+</body>
+</html>

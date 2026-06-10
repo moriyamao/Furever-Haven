@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Furever Haven — Sponsor a Pet</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <style>
+    .page-hero {
+      background: linear-gradient(135deg, #fff7ed 0%, #fce7f3 50%, #ede9fe 100%);
+      padding: 80px 64px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero .banner-shapes { position: absolute; inset: 0; pointer-events: none; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--yellow);
+      color: var(--dark);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+    .page-hero h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 56px;
+      color: var(--dark);
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+    .page-hero h1 span {
+      background: linear-gradient(135deg, var(--orange), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .page-hero p {
+      font-size: 17px;
+      color: #6b7280;
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.7;
+      font-weight: 400;
+    }
+
+    .sponsor-section {
+      padding: 80px 64px;
+      background: var(--white);
+    }
+
+    .section-label {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .section-label h2 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 38px;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .section-label p {
+      font-size: 15px;
+      color: #9ca3af;
+      font-weight: 400;
+    }
+
+    .tiers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .tier-card {
+      border-radius: 28px;
+      padding: 40px 32px;
+      position: relative;
+      transition: transform 0.3s, box-shadow 0.3s;
+      border: 2.5px solid #e5e7eb;
+      background: white;
+    }
+
+    .tier-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+
+    .tier-card.featured {
+      border-color: var(--orange);
+      box-shadow: 0 12px 40px rgba(255,107,53,0.15);
+    }
+
+    .featured-badge {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, var(--orange), var(--pink));
+      color: white;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 5px 18px;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+
+    .tier-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .tier-name {
+      font-family: 'Fredoka One', cursive;
+      font-size: 22px;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+
+    .tier-price {
+      font-family: 'Fredoka One', cursive;
+      font-size: 42px;
+      color: var(--orange);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .tier-price span {
+      font-size: 16px;
+      color: #9ca3af;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 600;
+    }
+
+    .tier-desc {
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.6;
+      margin: 16px 0 24px;
+      font-weight: 400;
+    }
+
+    .tier-perks {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    .tier-perks li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .tier-perks li i {
+      color: var(--green);
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .tier-btn {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      border-radius: 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 2.5px solid var(--orange);
+      color: var(--orange);
+      background: transparent;
+    }
+
+    .tier-btn:hover { background: var(--orange); color: white; transform: translateY(-2px); }
+
+    .tier-card.featured .tier-btn {
+      background: linear-gradient(135deg, var(--orange), var(--pink));
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 6px 20px rgba(255,107,53,0.35);
+    }
+
+    .tier-card.featured .tier-btn:hover {
+      box-shadow: 0 10px 28px rgba(255,107,53,0.45);
+    }
+
+    .impact-section {
+      padding: 80px 64px;
+      background: var(--cream);
+    }
+
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      max-width: 1000px;
+      margin: 48px auto 0;
+    }
+
+    .impact-card {
+      background: white;
+      border-radius: 20px;
+      padding: 28px 24px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+      transition: transform 0.3s;
+    }
+
+    .impact-card:hover { transform: translateY(-4px); }
+
+    .impact-icon { font-size: 36px; margin-bottom: 12px; display: block; }
+
+    .impact-card h3 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 32px;
+      color: var(--orange);
+      margin-bottom: 4px;
+    }
+
+    .impact-card p {
+      font-size: 13px;
+      color: #9ca3af;
+      font-weight: 600;
+    }
+
+    .sponsor-pets-section {
+      padding: 80px 64px;
+      background: var(--dark);
+    }
+
+    .sponsor-pets-section .section-label h2 { color: white; }
+    .sponsor-pets-section .section-label p { color: rgba(255,255,255,0.5); }
+
+    .sponsor-pets-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 1000px;
+      margin: 48px auto 0;
+    }
+
+    .sponsor-pet-card {
+      background: rgba(255,255,255,0.06);
+      border-radius: 24px;
+      overflow: hidden;
+      transition: transform 0.3s;
+      border: 1.5px solid rgba(255,255,255,0.1);
+    }
+
+    .sponsor-pet-card:hover { transform: translateY(-6px); }
+
+    .sponsor-pet-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .sponsor-pet-info { padding: 20px; }
+
+    .sponsor-pet-info h3 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 20px;
+      color: white;
+      margin-bottom: 6px;
+    }
+
+    .sponsor-pet-info p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.5;
+      font-weight: 400;
+      margin-bottom: 16px;
+    }
+
+    .sponsor-progress {
+      background: rgba(255,255,255,0.1);
+      border-radius: 100px;
+      height: 8px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .sponsor-progress-bar {
+      height: 100%;
+      border-radius: 100px;
+      background: linear-gradient(90deg, var(--orange), var(--pink));
+    }
+
+    .sponsor-progress-label {
+      font-size: 11px;
+      color: rgba(255,255,255,0.5);
+      font-weight: 700;
+    }
+
+    .sponsor-pet-btn {
+      display: block;
+      margin-top: 16px;
+      padding: 10px;
+      background: linear-gradient(135deg, var(--orange), var(--pink));
+      color: white;
+      text-align: center;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      transition: opacity 0.2s;
+    }
+
+    .sponsor-pet-btn:hover { opacity: 0.88; }
+
+    @media (max-width: 1024px) {
+      .tiers-grid { grid-template-columns: 1fr; max-width: 420px; }
+      .impact-grid { grid-template-columns: repeat(2, 1fr); }
+      .sponsor-pets-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .page-hero { padding: 48px 28px; }
+      .page-hero h1 { font-size: 38px; }
+      .sponsor-section, .impact-section, .sponsor-pets-section { padding: 48px 28px; }
+      .impact-grid { grid-template-columns: 1fr 1fr; }
+      .sponsor-pets-grid { grid-template-columns: 1fr; }
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .modal-overlay.active { display: flex; }
+
+    .modal {
+      background: white;
+      border-radius: 28px;
+      padding: 40px;
+      max-width: 480px;
+      width: 100%;
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: #9ca3af;
+      line-height: 1;
+    }
+    .modal-close:hover { color: var(--dark); }
+
+    .modal-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 26px;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+
+    .modal-subtitle {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-bottom: 24px;
+      font-weight: 400;
+    }
+
+    .gcash-box {
+      background: linear-gradient(135deg, #0070f3 0%, #00a8ff 100%);
+      border-radius: 18px;
+      padding: 20px 24px;
+      margin-bottom: 24px;
+      color: white;
+    }
+
+    .gcash-box .gcash-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      opacity: 0.75;
+      margin-bottom: 6px;
+    }
+
+    .gcash-box .gcash-number {
+      font-family: 'Fredoka One', cursive;
+      font-size: 28px;
+      letter-spacing: 2px;
+      margin-bottom: 2px;
+    }
+
+    .gcash-box .gcash-name {
+      font-size: 13px;
+      font-weight: 700;
+      opacity: 0.85;
+    }
+
+    .gcash-box .gcash-instruction {
+      font-size: 12px;
+      opacity: 0.7;
+      margin-top: 10px;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    .modal-form { display: flex; flex-direction: column; gap: 14px; }
+
+    .modal-form label {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--dark);
+      margin-bottom: 4px;
+      display: block;
+      letter-spacing: 0.5px;
+    }
+
+    .modal-form input,
+    .modal-form select,
+    .modal-form textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      color: var(--dark);
+      outline: none;
+      transition: border-color 0.2s;
+      box-sizing: border-box;
+    }
+
+    .modal-form input:focus,
+    .modal-form select:focus,
+    .modal-form textarea:focus { border-color: var(--orange); }
+
+    .modal-form input.error,
+    .modal-form select.error,
+    .modal-form textarea.error { border-color: #ef4444; }
+
+    .modal-error {
+      font-size: 11px;
+      color: #ef4444;
+      font-weight: 700;
+      display: none;
+      margin-top: 2px;
+    }
+    .modal-error.visible { display: block; }
+
+    .modal-submit {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--orange), var(--pink));
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      margin-top: 6px;
+    }
+    .modal-submit:hover:not(:disabled) { opacity: 0.9; transform: translateY(-2px); }
+    .modal-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .modal-success {
+      display: none;
+      text-align: center;
+      padding: 20px 0;
+    }
+    .modal-success.visible { display: block; }
+    .modal-success .success-icon { font-size: 56px; margin-bottom: 16px; }
+    .modal-success h3 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 24px;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+    .modal-success p { font-size: 14px; color: #6b7280; line-height: 1.6; font-weight: 400; }
+
+    .modal-rate-limit {
+      display: none;
+      background: #fff3cd;
+      border: 1.5px solid #f59e0b;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #92400e;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+    .modal-rate-limit.visible { display: block; }
+
+    /* honeypot */
+    .hp-field { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <a href="index.html" class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/1076/1076877.png" alt="Paw Logo">
+        <span class="logo-text">Furever Haven</span>
+      </a>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="adoption.html">Adoption</a></li>
+          <li><a href="sponsor.html" class="active">Sponsor</a></li>
+          <li><a href="lost-found.html">Lost & Found</a></li>
+          <li><a href="services.html">Services</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="header-right">
+      <div class="search-bar">
+        <input type="text" placeholder="Search...">
+        <button class="search-btn"><i class="fas fa-search"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <section class="page-hero">
+    <div class="banner-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+    <div class="hero-badge">❤️ Make a Difference</div>
+    <h1>Sponsor a <span>Furry Friend</span></h1>
+    <p>Your support keeps our animals fed, healthy, and safe while they wait for their forever homes.</p>
+  </section>
+
+  <section class="sponsor-section">
+    <div class="section-label">
+      <span class="section-tag" style="background:#fff0f6;color:var(--pink);">🐾 Choose Your Tier</span>
+      <h2>Sponsorship Plans</h2>
+      <p>Every peso goes directly to the animals. Pick a plan that works for you.</p>
+    </div>
+
+    <div class="tiers-grid">
+
+      <div class="tier-card">
+        <span class="tier-icon">🌱</span>
+        <div class="tier-name">Seedling</div>
+        <div class="tier-price">₱250 <span>/ month</span></div>
+        <p class="tier-desc">A small but meaningful contribution that helps cover daily meals for one animal.</p>
+        <ul class="tier-perks">
+          <li><i class="fas fa-check-circle"></i> Feeds 1 animal for a month</li>
+          <li><i class="fas fa-check-circle"></i> Monthly update email</li>
+          <li><i class="fas fa-check-circle"></i> Sponsor certificate</li>
+          <li><i class="fas fa-check-circle"></i> Name on our website</li>
+        </ul>
+        <button class="tier-btn" onclick="openModal('Seedling — ₱250/month')">Sponsor Now</button>
+      </div>
+
+      <div class="tier-card featured">
+        <div class="featured-badge">⭐ Most Popular</div>
+        <span class="tier-icon">🌻</span>
+        <div class="tier-name">Sunflower</div>
+        <div class="tier-price">₱500 <span>/ month</span></div>
+        <p class="tier-desc">Cover meals, basic grooming, and vitamins for one animal in our care.</p>
+        <ul class="tier-perks">
+          <li><i class="fas fa-check-circle"></i> Everything in Seedling</li>
+          <li><i class="fas fa-check-circle"></i> Covers grooming & vitamins</li>
+          <li><i class="fas fa-check-circle"></i> Monthly photo update</li>
+          <li><i class="fas fa-check-circle"></i> Dedicated pet page shoutout</li>
+          <li><i class="fas fa-check-circle"></i> Priority adoption rights</li>
+        </ul>
+        <button class="tier-btn" onclick="openModal('Sunflower — ₱500/month')">Sponsor Now</button>
+      </div>
+
+      <div class="tier-card">
+        <span class="tier-icon">🌳</span>
+        <div class="tier-name">Guardian</div>
+        <div class="tier-price">₱1,000 <span>/ month</span></div>
+        <p class="tier-desc">Full coverage for one animal including vet check-ups, vaccines, and all essentials.</p>
+        <ul class="tier-perks">
+          <li><i class="fas fa-check-circle"></i> Everything in Sunflower</li>
+          <li><i class="fas fa-check-circle"></i> Full vet coverage</li>
+          <li><i class="fas fa-check-circle"></i> Vaccines & deworming</li>
+          <li><i class="fas fa-check-circle"></i> Weekly photo & video updates</li>
+          <li><i class="fas fa-check-circle"></i> VIP meetup invitation</li>
+          <li><i class="fas fa-check-circle"></i> Featured on social media</li>
+        </ul>
+        <button class="tier-btn" onclick="openModal('Guardian — ₱1,000/month')">Sponsor Now</button>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="impact-section">
+    <div class="section-label">
+      <span class="section-tag" style="background:#fff0f6;color:var(--pink);">📊 Our Impact</span>
+      <h2>Where Your Money Goes</h2>
+      <p>100% of sponsorship funds go directly to animal care.</p>
+    </div>
+    <div class="impact-grid">
+      <div class="impact-card">
+        <span class="impact-icon">🍖</span>
+        <h3>40%</h3>
+        <p>Food & Nutrition</p>
+      </div>
+      <div class="impact-card">
+        <span class="impact-icon">💉</span>
+        <h3>30%</h3>
+        <p>Vet Care & Vaccines</p>
+      </div>
+      <div class="impact-card">
+        <span class="impact-icon">🛁</span>
+        <h3>20%</h3>
+        <p>Grooming & Hygiene</p>
+      </div>
+      <div class="impact-card">
+        <span class="impact-icon">🏠</span>
+        <h3>10%</h3>
+        <p>Shelter & Supplies</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sponsor-pets-section">
+    <div class="section-label">
+      <span class="section-tag" style="background:rgba(255,217,61,0.15);color:var(--yellow);">🐾 Sponsor a Specific Pet</span>
+      <h2>Choose Who to Help</h2>
+      <p>Pick a specific animal to sponsor and follow their journey.</p>
+    </div>
+    <div class="sponsor-pets-grid">
+      <div class="sponsor-pet-card">
+        <img src="https://images.unsplash.com/photo-1601979031925-424e53b6caaa?w=400&q=80" alt="Logan" class="sponsor-pet-img">
+        <div class="sponsor-pet-info">
+          <h3>Logan 🐾</h3>
+          <p>4-month-old puppy. Needs vaccines, deworming, and daily nutrition support.</p>
+          <div class="sponsor-progress"><div class="sponsor-progress-bar" style="width:45%"></div></div>
+          <span class="sponsor-progress-label">45% of monthly goal met</span>
+          <button class="sponsor-pet-btn" onclick="openModal('Sponsor a Specific Pet — Logan')">Sponsor Logan</button>
+        </div>
+      </div>
+      <div class="sponsor-pet-card">
+        <img src="https://images.unsplash.com/photo-1537151625747-768eb6cf92b2?w=400&q=80" alt="Dean" class="sponsor-pet-img">
+        <div class="sponsor-pet-info">
+          <h3>Dean 🐕</h3>
+          <p>2-year-old dog. Currently in rehabilitation. Needs ongoing vet support.</p>
+          <div class="sponsor-progress"><div class="sponsor-progress-bar" style="width:70%"></div></div>
+          <span class="sponsor-progress-label">70% of monthly goal met</span>
+          <button class="sponsor-pet-btn" onclick="openModal('Sponsor a Specific Pet — Dean')">Sponsor Dean</button>
+        </div>
+      </div>
+      <div class="sponsor-pet-card">
+        <img src="https://images.unsplash.com/photo-1495360010541-f48722b34f7d?w=400&q=80" alt="Jess" class="sponsor-pet-img">
+        <div class="sponsor-pet-info">
+          <h3>Jess 🐱</h3>
+          <p>2-year-old cat. Shy but sweet. Needs nutritional support and a calm space.</p>
+          <div class="sponsor-progress"><div class="sponsor-progress-bar" style="width:30%"></div></div>
+          <span class="sponsor-progress-label">30% of monthly goal met</span>
+          <button class="sponsor-pet-btn" onclick="openModal('Sponsor a Specific Pet — Jess')">Sponsor Jess</button>
+        </div>
+      </div>
+
+      <div class="sponsor-pet-card">
+        <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80" alt="Mochi" class="sponsor-pet-img">
+        <div class="sponsor-pet-info">
+          <h3>Mochi 🐶</h3>
+          <p>1-year-old mixed breed. Energetic and friendly. Needs deworming and monthly nutrition.</p>
+          <div class="sponsor-progress"><div class="sponsor-progress-bar" style="width:55%"></div></div>
+          <span class="sponsor-progress-label">55% of monthly goal met</span>
+          <button class="sponsor-pet-btn" onclick="openModal('Sponsor a Specific Pet — Mochi')">Sponsor Mochi</button>
+        </div>
+      </div>
+
+      <div class="sponsor-pet-card">
+        <img src="https://www.cascadiannomads.com/uploads/1/8/9/3/1893015/3963329_orig.jpg" alt="Nala" class="sponsor-pet-img">
+        <div class="sponsor-pet-info">
+          <h3>Nala 🐱</h3>
+          <p>3-year-old cat. Recovered from injury. Needs ongoing check-ups and special diet.</p>
+          <div class="sponsor-progress"><div class="sponsor-progress-bar" style="width:20%"></div></div>
+          <span class="sponsor-progress-label">20% of monthly goal met</span>
+          <button class="sponsor-pet-btn" onclick="openModal('Sponsor a Specific Pet — Nala')">Sponsor Nala</button>
+        </div>
+      </div>
+
+      <div class="sponsor-pet-card">
+        <img src="https://images.unsplash.com/photo-1561037404-61cd46aa615b?w=400&q=80" alt="Coco" class="sponsor-pet-img">
+        <div class="sponsor-pet-info">
+          <h3>Coco 🐾</h3>
+          <p>6-month-old puppy. Rescued from the street. Needs vaccines and daily feeding support.</p>
+          <div class="sponsor-progress"><div class="sponsor-progress-bar" style="width:60%"></div></div>
+          <span class="sponsor-progress-label">60% of monthly goal met</span>
+          <button class="sponsor-pet-btn" onclick="openModal('Sponsor a Specific Pet — Coco')">Sponsor Coco</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-brand">Furever Haven 🐾</div>
+    <div class="footer-copy">© 2025 Furever Haven. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms</a>
+      <a href="adoption.html">Adopt</a>
+    </div>
+  </footer>
+
+  <!-- SPONSOR MODAL -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+
+      <div id="modal-form-wrap">
+        <div class="modal-title">Complete Your Sponsorship</div>
+        <div class="modal-subtitle" id="modal-tier-label">—</div>
+
+        <div class="gcash-box">
+          <div class="gcash-label">SEND PAYMENT VIA GCASH</div>
+          <div class="gcash-number">0968 548 9839</div>
+          <div class="gcash-name">Morish Macayan</div>
+          <div class="gcash-instruction">Send the amount for your chosen tier, then fill out the form below with your GCash reference number so we can confirm your sponsorship.</div>
+        </div>
+
+        <div class="modal-form">
+          <div>
+            <label>Full Name *</label>
+            <input type="text" id="sp-name" placeholder="e.g. Maria Santos" maxlength="100">
+            <div class="modal-error" id="sp-name-error">Please enter your full name.</div>
+          </div>
+          <div>
+            <label>Email Address *</label>
+            <input type="email" id="sp-email" placeholder="e.g. maria@gmail.com" maxlength="150">
+            <div class="modal-error" id="sp-email-error">Please enter a valid email address.</div>
+          </div>
+          <div>
+            <label>GCash Reference Number *</label>
+            <input type="text" id="sp-ref" placeholder="e.g. 1234567890" maxlength="30">
+            <div class="modal-error" id="sp-ref-error">Please enter your GCash reference number.</div>
+          </div>
+          <div>
+            <label>Message (optional)</label>
+            <textarea id="sp-message" placeholder="Anything you'd like us to know..." rows="3" maxlength="500"></textarea>
+          </div>
+
+          <!-- honeypot -->
+          <input type="text" class="hp-field" id="sp-hp" tabindex="-1" autocomplete="off">
+
+          <div class="modal-rate-limit" id="sp-rate-limit">Too many submissions. Please try again later.</div>
+          <button class="modal-submit" id="sp-submit-btn" onclick="submitSponsor()">
+            <span id="sp-btn-text">Confirm Sponsorship</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="modal-success" id="modal-success">
+        <div class="success-icon">🎉</div>
+        <h3>Thank you for sponsoring!</h3>
+        <p>We've received your submission and will verify your GCash payment shortly. You'll hear from us within 24 hours.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() { emailjs.init('tsCajoh5dqxR93vz5'); })();
+
+    const SP_RATE_KEY = 'fh_sponsor_times';
+    const SP_MAX = 3;
+    const SP_WINDOW = 60 * 60 * 1000;
+
+    function openModal(tier) {
+      document.getElementById('modal-tier-label').textContent = tier;
+      document.getElementById('modal-overlay').classList.add('active');
+      document.getElementById('modal-form-wrap').style.display = '';
+      document.getElementById('modal-success').classList.remove('visible');
+      resetForm();
+    }
+
+    function closeModal() {
+      document.getElementById('modal-overlay').classList.remove('active');
+    }
+
+    document.getElementById('modal-overlay').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    function resetForm() {
+      ['sp-name','sp-email','sp-ref','sp-message','sp-hp'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+        if (el) el.classList.remove('error');
+      });
+      ['sp-name-error','sp-email-error','sp-ref-error','sp-rate-limit'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.remove('visible');
+      });
+      const btn = document.getElementById('sp-submit-btn');
+      btn.disabled = false;
+      document.getElementById('sp-btn-text').textContent = 'Confirm Sponsorship';
+    }
+
+    function sanitize(str) {
+      return str.replace(/[<>"'`]/g, '').trim();
+    }
+
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function checkRateLimit() {
+      const now = Date.now();
+      const times = JSON.parse(localStorage.getItem(SP_RATE_KEY) || '[]');
+      const recent = times.filter(t => now - t < SP_WINDOW);
+      if (recent.length >= SP_MAX) return false;
+      recent.push(now);
+      localStorage.setItem(SP_RATE_KEY, JSON.stringify(recent));
+      return true;
+    }
+
+    function setErr(inputId, errorId, show) {
+      const input = document.getElementById(inputId);
+      const error = document.getElementById(errorId);
+      if (show) {
+        input && input.classList.add('error');
+        error && error.classList.add('visible');
+      } else {
+        input && input.classList.remove('error');
+        error && error.classList.remove('visible');
+      }
+    }
+
+    function submitSponsor() {
+      if (document.getElementById('sp-hp').value) return;
+
+      const name = document.getElementById('sp-name').value.trim();
+      const email = document.getElementById('sp-email').value.trim();
+      const ref = document.getElementById('sp-ref').value.trim();
+      const tier = document.getElementById('modal-tier-label').textContent;
+      const message = document.getElementById('sp-message').value.trim();
+
+      let valid = true;
+      if (!name || name.length < 2) { setErr('sp-name','sp-name-error',true); valid = false; }
+      else setErr('sp-name','sp-name-error',false);
+
+      if (!email || !isValidEmail(email)) { setErr('sp-email','sp-email-error',true); valid = false; }
+      else setErr('sp-email','sp-email-error',false);
+
+      if (!ref || ref.length < 5) { setErr('sp-ref','sp-ref-error',true); valid = false; }
+      else setErr('sp-ref','sp-ref-error',false);
+
+      if (!valid) return;
+
+      if (!checkRateLimit()) {
+        document.getElementById('sp-rate-limit').classList.add('visible');
+        return;
+      }
+
+      const btn = document.getElementById('sp-submit-btn');
+      btn.disabled = true;
+      document.getElementById('sp-btn-text').textContent = 'Sending...';
+
+      emailjs.send('service_00h5kce', 'template_u8vjprg', {
+        from_name: sanitize(name),
+        from_email: sanitize(email),
+        tier: sanitize(tier),
+        reference: sanitize(ref),
+        message: sanitize(message) || '—'
+      }).then(function() {
+        document.getElementById('modal-form-wrap').style.display = 'none';
+        document.getElementById('modal-success').classList.add('visible');
+      }).catch(function(err) {
+        console.error('EmailJS error:', err);
+        btn.disabled = false;
+        document.getElementById('sp-btn-text').textContent = 'Confirm Sponsorship';
+        alert('Something went wrong. Please try again or contact us at morishalfonsomacayan@gmail.com');
+      });
+    }
+  </script>
+
+</body>
+</html>

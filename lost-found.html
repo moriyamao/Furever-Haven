@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Furever Haven — Lost & Found</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .page-hero {
+      background: linear-gradient(135deg, #fff7ed 0%, #fce7f3 50%, #ede9fe 100%);
+      padding: 80px 64px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-hero .banner-shapes { position: absolute; inset: 0; pointer-events: none; }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--yellow);
+      color: var(--dark);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 20px;
+    }
+    .page-hero h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 56px;
+      color: var(--dark);
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+    .page-hero h1 span {
+      background: linear-gradient(135deg, var(--orange), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .page-hero p {
+      font-size: 17px;
+      color: #6b7280;
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.7;
+      font-weight: 400;
+    }
+
+    /* ── MAIN LAYOUT ── */
+    .lf-layout {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 0;
+      min-height: 600px;
+    }
+
+    /* ── SIDEBAR / FORM ── */
+    .lf-sidebar {
+      background: white;
+      padding: 40px 36px;
+      border-right: 1.5px solid #f3f4f6;
+      position: sticky;
+      top: 72px;
+      height: calc(100vh - 72px);
+      overflow-y: auto;
+    }
+
+    .lf-sidebar h2 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 22px;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+
+    .lf-sidebar .form-subtitle {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-bottom: 28px;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    /* Type toggle */
+    .type-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .type-toggle input[type="radio"] {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .type-toggle label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px;
+      border: 2px solid #e5e7eb;
+      border-radius: 14px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 800;
+      color: #6b7280;
+      transition: all 0.2s;
+      background: #fafafa;
+    }
+
+    .type-toggle label:hover { border-color: var(--orange); }
+
+    #type-lost:checked ~ .toggle-lost,
+    .type-toggle input[value="lost"]:checked + label {
+      border-color: #ef4444;
+      background: #fef2f2;
+      color: #dc2626;
+    }
+
+    .type-toggle input[value="found"]:checked + label {
+      border-color: var(--green);
+      background: #f0fdf4;
+      color: #16a34a;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--dark);
+      letter-spacing: 0.5px;
+    }
+
+    .form-group label .required { color: var(--pink); margin-left: 2px; }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 11px 14px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dark);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: #fafafa;
+      width: 100%;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(255,107,53,0.1);
+      background: white;
+    }
+
+    .form-group input.error,
+    .form-group select.error,
+    .form-group textarea.error {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 3px rgba(239,68,68,0.1);
+    }
+
+    .error-msg {
+      font-size: 11px;
+      color: #ef4444;
+      font-weight: 700;
+      display: none;
+    }
+    .error-msg.visible { display: block; }
+
+    .form-group textarea { resize: vertical; min-height: 80px; }
+
+    .honeypot { display: none !important; visibility: hidden !important; }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--orange), var(--pink));
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+      box-shadow: 0 6px 20px rgba(255,107,53,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(255,107,53,0.45);
+    }
+
+    .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+    .rate-limit-msg {
+      display: none;
+      background: #fef2f2;
+      border: 1.5px solid #fca5a5;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #dc2626;
+      margin-top: 10px;
+      text-align: center;
+    }
+    .rate-limit-msg.visible { display: block; }
+
+    .success-toast {
+      display: none;
+      background: #f0fdf4;
+      border: 1.5px solid #86efac;
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #16a34a;
+      margin-top: 12px;
+      text-align: center;
+      gap: 8px;
+      align-items: center;
+    }
+    .success-toast.visible { display: flex; }
+
+    /* ── BOARD ── */
+    .lf-board {
+      padding: 40px 48px;
+      background: var(--cream);
+    }
+
+    .board-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .board-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 22px;
+      color: var(--dark);
+    }
+
+    .board-title span {
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #9ca3af;
+      margin-left: 8px;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+    }
+
+    .filter-tab {
+      padding: 8px 18px;
+      border-radius: 100px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      border: 2px solid #e5e7eb;
+      background: white;
+      color: #6b7280;
+      transition: all 0.2s;
+    }
+
+    .filter-tab:hover { border-color: var(--orange); color: var(--dark); }
+    .filter-tab.active-all { border-color: var(--orange); background: var(--orange); color: white; }
+    .filter-tab.active-lost { border-color: #ef4444; background: #ef4444; color: white; }
+    .filter-tab.active-found { border-color: var(--green); background: var(--green); color: white; }
+
+    .reports-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .report-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      border: 1.5px solid #f3f4f6;
+    }
+
+    .report-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.1);
+    }
+
+    .report-card-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+      background: #f3f4f6;
+    }
+
+    .report-card-img-placeholder {
+      width: 100%;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+      background: linear-gradient(135deg, #f9fafb, #f3f4f6);
+    }
+
+    .report-type-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      padding: 5px 12px;
+      border-radius: 100px;
+      text-transform: uppercase;
+    }
+
+    .badge-lost { background: #ef4444; color: white; }
+    .badge-found { background: var(--green); color: white; }
+
+    .report-card-body { padding: 18px 20px 20px; }
+
+    .report-card-body h3 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 18px;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+
+    .report-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .report-chip {
+      background: var(--cream);
+      border: 1.5px solid #e5e7eb;
+      font-size: 11px;
+      font-weight: 700;
+      color: #6b7280;
+      padding: 3px 9px;
+      border-radius: 100px;
+    }
+
+    .report-desc {
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.6;
+      margin-bottom: 14px;
+      font-weight: 400;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .report-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1.5px solid #f3f4f6;
+    }
+
+    .report-contact {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--orange);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: color 0.2s;
+    }
+    .report-contact:hover { color: var(--pink); }
+
+    .report-date {
+      font-size: 11px;
+      color: #d1d5db;
+      font-weight: 600;
+    }
+
+    /* Delete button */
+    .report-delete {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.45);
+      border: none;
+      color: white;
+      font-size: 11px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .report-card:hover .report-delete { opacity: 1; }
+    .report-delete:hover { background: #ef4444; }
+
+    /* Empty state */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .empty-state .empty-icon { font-size: 64px; margin-bottom: 16px; }
+
+    .empty-state h3 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 24px;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .empty-state p {
+      font-size: 14px;
+      color: #9ca3af;
+      font-weight: 400;
+    }
+
+    /* ── NOTICE ── */
+    .notice-box {
+      background: #fff7ed;
+      border: 1.5px solid #fed7aa;
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 24px;
+    }
+    .notice-box i { color: var(--orange); font-size: 15px; margin-top: 2px; flex-shrink: 0; }
+    .notice-box p { font-size: 12px; color: #92400e; font-weight: 600; line-height: 1.6; margin: 0; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .lf-layout { grid-template-columns: 1fr; }
+      .lf-sidebar { position: static; height: auto; border-right: none; border-bottom: 1.5px solid #f3f4f6; }
+      .lf-board { padding: 32px 28px; }
+    }
+
+    @media (max-width: 768px) {
+      .page-hero { padding: 48px 28px; }
+      .page-hero h1 { font-size: 38px; }
+      .lf-sidebar { padding: 28px 20px; }
+      .lf-board { padding: 24px 16px; }
+      .board-toolbar { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <a href="index.html" class="logo">
+        <img src="https://cdn-icons-png.flaticon.com/512/1076/1076877.png" alt="Paw Logo">
+        <span class="logo-text">Furever Haven</span>
+      </a>
+      <nav class="main-nav">
+        <ul>
+          <li><a href="adoption.html">Adoption</a></li>
+          <li><a href="sponsor.html">Sponsor</a></li>
+          <li><a href="lost-found.html" class="active">Lost & Found</a></li>
+          <li><a href="services.html">Services</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="header-right">
+      <div class="search-bar">
+        <input type="text" placeholder="Search...">
+        <button class="search-btn"><i class="fas fa-search"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <section class="page-hero">
+    <div class="banner-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+    <div class="hero-badge">🔍 Community Board</div>
+    <h1>Lost & <span>Found Pets</span></h1>
+    <p>Post a missing pet or report one you've found. Help reunite animals with their families.</p>
+  </section>
+
+  <div class="lf-layout">
+
+    <!-- SIDEBAR FORM -->
+    <aside class="lf-sidebar">
+      <h2>Post a Report 🐾</h2>
+      <p class="form-subtitle">Fill out the form and your report will appear on the board instantly.</p>
+
+      <div class="notice-box">
+        <i class="fas fa-info-circle"></i>
+        <p>Reports are stored locally on your browser. Share the page link so others in the community can see and help.</p>
+      </div>
+
+      <!-- Type toggle -->
+      <div class="type-toggle">
+        <input type="radio" name="report-type" id="type-lost" value="lost" checked>
+        <label for="type-lost"><i class="fas fa-search" style="color:#ef4444"></i> I Lost a Pet</label>
+        <input type="radio" name="report-type" id="type-found" value="found">
+        <label for="type-found"><i class="fas fa-hand-holding-heart" style="color:var(--green)"></i> I Found a Pet</label>
+      </div>
+
+      <div class="form-group">
+        <label>Pet Name <span class="required">*</span></label>
+        <input type="text" id="pet-name" placeholder="e.g. Brownie" maxlength="60" autocomplete="off">
+        <span class="error-msg" id="pet-name-error">Please enter the pet's name.</span>
+      </div>
+
+      <div class="form-group">
+        <label>Pet Type <span class="required">*</span></label>
+        <select id="pet-type">
+          <option value="">Select type</option>
+          <option value="Dog">Dog</option>
+          <option value="Cat">Cat</option>
+          <option value="Bird">Bird</option>
+          <option value="Rabbit">Rabbit</option>
+          <option value="Other">Other</option>
+        </select>
+        <span class="error-msg" id="pet-type-error">Please select a pet type.</span>
+      </div>
+
+      <div class="form-group">
+        <label>Breed / Color <span class="required">*</span></label>
+        <input type="text" id="pet-breed" placeholder="e.g. Brown Aspin, short hair" maxlength="80" autocomplete="off">
+        <span class="error-msg" id="pet-breed-error">Please describe the breed or color.</span>
+      </div>
+
+      <div class="form-group">
+        <label>Last Seen / Found Location <span class="required">*</span></label>
+        <input type="text" id="pet-location" placeholder="e.g. Malolos Public Market" maxlength="120" autocomplete="off">
+        <span class="error-msg" id="pet-location-error">Please enter a location.</span>
+      </div>
+
+      <div class="form-group">
+        <label>Date <span class="required">*</span></label>
+        <input type="date" id="pet-date">
+        <span class="error-msg" id="pet-date-error">Please enter the date.</span>
+      </div>
+
+      <div class="form-group">
+        <label>Photo URL <span style="color:#9ca3af;font-weight:600;">(optional)</span></label>
+        <input type="url" id="pet-photo" placeholder="https://..." maxlength="300" autocomplete="off">
+        <span class="error-msg" id="pet-photo-error">Please enter a valid URL (https://...).</span>
+      </div>
+
+      <div class="form-group">
+        <label>Contact Number <span class="required">*</span></label>
+        <input type="tel" id="pet-contact" placeholder="e.g. 09xxxxxxxxx" maxlength="20" autocomplete="off">
+        <span class="error-msg" id="pet-contact-error">Please enter a contact number.</span>
+      </div>
+
+      <div class="form-group">
+        <label>Description <span class="required">*</span></label>
+        <textarea id="pet-desc" placeholder="Any identifying features, collar, tags, behavior..." maxlength="400"></textarea>
+        <span class="error-msg" id="pet-desc-error">Please write a short description.</span>
+      </div>
+
+      <!-- Honeypot -->
+      <input type="text" class="honeypot" id="hp-lf" tabindex="-1" autocomplete="off">
+
+      <button class="submit-btn" id="lf-submit-btn" onclick="submitReport()">
+        <i class="fas fa-paw"></i>
+        <span id="lf-btn-text">Post Report</span>
+      </button>
+
+      <div class="rate-limit-msg" id="lf-rate-limit"></div>
+      <div class="success-toast" id="lf-success">
+        <i class="fas fa-check-circle"></i> Report posted! It's now visible on the board.
+      </div>
+    </aside>
+
+    <!-- BOARD -->
+    <main class="lf-board">
+      <div class="board-toolbar">
+        <div class="board-title">
+          Community Reports <span id="report-count">0 reports</span>
+        </div>
+        <div class="filter-tabs">
+          <button class="filter-tab active-all" onclick="filterReports('all', this)">All</button>
+          <button class="filter-tab" onclick="filterReports('lost', this)">🔴 Lost</button>
+          <button class="filter-tab" onclick="filterReports('found', this)">🟢 Found</button>
+        </div>
+      </div>
+
+      <div class="reports-grid" id="reports-grid">
+        <!-- cards injected by JS -->
+      </div>
+    </main>
+
+  </div>
+
+  <footer>
+    <div class="footer-brand">Furever Haven 🐾</div>
+    <div class="footer-copy">© 2025 Furever Haven. All rights reserved.</div>
+    <div class="footer-links">
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="terms.html">Terms</a>
+      <a href="adoption.html">Adopt</a>
+    </div>
+  </footer>
+
+  <script>
+    const STORAGE_KEY = 'fh_lf_reports';
+    const RATE_KEY = 'fh_lf_times';
+    const MAX_POSTS = 3;
+    const WINDOW_MS = 60 * 60 * 1000;
+
+    let activeFilter = 'all';
+
+    // ── SANITIZE ──
+    function sanitize(str) {
+      return str.replace(/[<>"'`]/g, '').trim();
+    }
+
+    // ── RATE LIMIT ──
+    function checkRateLimit() {
+      const now = Date.now();
+      const times = JSON.parse(localStorage.getItem(RATE_KEY) || '[]');
+      const recent = times.filter(t => now - t < WINDOW_MS);
+      if (recent.length >= MAX_POSTS) return false;
+      recent.push(now);
+      localStorage.setItem(RATE_KEY, JSON.stringify(recent));
+      return true;
+    }
+
+    // ── VALIDATE ──
+    function setError(inputId, errorId, show) {
+      const el = document.getElementById(inputId);
+      const err = document.getElementById(errorId);
+      if (show) { el && el.classList.add('error'); err && err.classList.add('visible'); }
+      else { el && el.classList.remove('error'); err && err.classList.remove('visible'); }
+    }
+
+    function isValidUrl(str) {
+      if (!str) return true; // optional
+      try { return ['https:','http:'].includes(new URL(str).protocol); } catch { return false; }
+    }
+
+    function validateForm() {
+      let valid = true;
+      const hp = document.getElementById('hp-lf').value;
+      if (hp) return false;
+
+      const name     = document.getElementById('pet-name').value.trim();
+      const type     = document.getElementById('pet-type').value;
+      const breed    = document.getElementById('pet-breed').value.trim();
+      const location = document.getElementById('pet-location').value.trim();
+      const date     = document.getElementById('pet-date').value;
+      const photo    = document.getElementById('pet-photo').value.trim();
+      const contact  = document.getElementById('pet-contact').value.trim();
+      const desc     = document.getElementById('pet-desc').value.trim();
+
+      if (!name || name.length < 1)           { setError('pet-name',     'pet-name-error',     true); valid = false; } else setError('pet-name',     'pet-name-error',     false);
+      if (!type)                               { setError('pet-type',     'pet-type-error',     true); valid = false; } else setError('pet-type',     'pet-type-error',     false);
+      if (!breed || breed.length < 2)          { setError('pet-breed',    'pet-breed-error',    true); valid = false; } else setError('pet-breed',    'pet-breed-error',    false);
+      if (!location || location.length < 3)    { setError('pet-location', 'pet-location-error', true); valid = false; } else setError('pet-location', 'pet-location-error', false);
+      if (!date)                               { setError('pet-date',     'pet-date-error',     true); valid = false; } else setError('pet-date',     'pet-date-error',     false);
+      if (!isValidUrl(photo))                  { setError('pet-photo',    'pet-photo-error',    true); valid = false; } else setError('pet-photo',    'pet-photo-error',    false);
+      if (!contact || contact.length < 7)      { setError('pet-contact',  'pet-contact-error',  true); valid = false; } else setError('pet-contact',  'pet-contact-error',  false);
+      if (!desc || desc.length < 10)           { setError('pet-desc',     'pet-desc-error',     true); valid = false; } else setError('pet-desc',     'pet-desc-error',     false);
+
+      return valid;
+    }
+
+    // ── SUBMIT ──
+    function submitReport() {
+      if (!validateForm()) return;
+
+      if (!checkRateLimit()) {
+        const msg = document.getElementById('lf-rate-limit');
+        msg.textContent = '⏱ Too many posts. Please wait before posting again.';
+        msg.classList.add('visible');
+        return;
+      }
+
+      const report = {
+        id: Date.now().toString(),
+        type: document.querySelector('input[name="report-type"]:checked').value,
+        name: sanitize(document.getElementById('pet-name').value),
+        petType: sanitize(document.getElementById('pet-type').value),
+        breed: sanitize(document.getElementById('pet-breed').value),
+        location: sanitize(document.getElementById('pet-location').value),
+        date: document.getElementById('pet-date').value,
+        photo: document.getElementById('pet-photo').value.trim(),
+        contact: sanitize(document.getElementById('pet-contact').value),
+        desc: sanitize(document.getElementById('pet-desc').value),
+        posted: Date.now()
+      };
+
+      const reports = getReports();
+      reports.unshift(report);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(reports));
+
+      // Reset form
+      document.getElementById('pet-name').value = '';
+      document.getElementById('pet-type').value = '';
+      document.getElementById('pet-breed').value = '';
+      document.getElementById('pet-location').value = '';
+      document.getElementById('pet-date').value = '';
+      document.getElementById('pet-photo').value = '';
+      document.getElementById('pet-contact').value = '';
+      document.getElementById('pet-desc').value = '';
+      document.getElementById('type-lost').checked = true;
+
+      document.getElementById('lf-rate-limit').classList.remove('visible');
+      const toast = document.getElementById('lf-success');
+      toast.classList.add('visible');
+      setTimeout(() => toast.classList.remove('visible'), 4000);
+
+      renderReports();
+    }
+
+    // ── STORAGE ──
+    function getReports() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }
+      catch { return []; }
+    }
+
+    function deleteReport(id) {
+      const reports = getReports().filter(r => r.id !== id);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(reports));
+      renderReports();
+    }
+
+    // ── RENDER ──
+    function filterReports(type, btn) {
+      activeFilter = type;
+      document.querySelectorAll('.filter-tab').forEach(t => {
+        t.className = 'filter-tab';
+      });
+      if (type === 'all')   btn.classList.add('active-all');
+      if (type === 'lost')  btn.classList.add('active-lost');
+      if (type === 'found') btn.classList.add('active-found');
+      renderReports();
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '';
+      const d = new Date(dateStr + 'T00:00:00');
+      return d.toLocaleDateString('en-PH', { year: 'numeric', month: 'short', day: 'numeric' });
+    }
+
+    function petEmoji(type) {
+      const map = { Dog: '🐶', Cat: '🐱', Bird: '🐦', Rabbit: '🐰', Other: '🐾' };
+      return map[type] || '🐾';
+    }
+
+    function renderReports() {
+      const all = getReports();
+      const filtered = activeFilter === 'all' ? all : all.filter(r => r.type === activeFilter);
+      const grid = document.getElementById('reports-grid');
+      const count = document.getElementById('report-count');
+
+      count.textContent = all.length + (all.length === 1 ? ' report' : ' reports');
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <h3>${activeFilter === 'all' ? 'No reports yet' : 'No ' + activeFilter + ' reports'}</h3>
+            <p>${activeFilter === 'all' ? 'Be the first to post a lost or found report.' : 'Try switching to a different filter.'}</p>
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(r => `
+        <div class="report-card" id="card-${r.id}">
+          ${r.photo
+            ? `<img class="report-card-img" src="${r.photo}" alt="${r.name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+               <div class="report-card-img-placeholder" style="display:none">${petEmoji(r.petType)}</div>`
+            : `<div class="report-card-img-placeholder">${petEmoji(r.petType)}</div>`
+          }
+          <span class="report-type-badge badge-${r.type}">${r.type === 'lost' ? '🔴 Lost' : '🟢 Found'}</span>
+          <button class="report-delete" onclick="deleteReport('${r.id}')" title="Remove report"><i class="fas fa-times"></i></button>
+          <div class="report-card-body">
+            <h3>${r.name}</h3>
+            <div class="report-meta">
+              <span class="report-chip">${r.petType}</span>
+              <span class="report-chip">${r.breed}</span>
+            </div>
+            <p class="report-desc">${r.desc}</p>
+            <div class="report-footer">
+              <a href="tel:${r.contact}" class="report-contact"><i class="fas fa-phone"></i> ${r.contact}</a>
+              <span class="report-date">📍 ${r.location} · ${formatDate(r.date)}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ── INIT ──
+    renderReports();
+  </script>
+
+</body>
+</html>
